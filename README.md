@@ -13,7 +13,7 @@ flatbox-led-ultra is a Low profile hitbox-layout fightstick which improved and e
 |Focus on mode (on/off) | no | yes| yes|
 |D-PAD/left stick/right stick/ mode | no | yes , can choose by a slider| yes , can choose by a slider|
 |SOCD mode (only three options)| noly choose by the Hotkeys | yes, can can choose by a slider|  yes, can can choose by a slider|
-|USB Passthrough| no  | yes |
+|USB Passthrough| no  | yes | yes |
 
 ![Flatbox-LED-Ultra](configs/Flatbox-LED-Ultra/assets/flatbox-ultra-1.jpg)
 ![Flatbox-LED-Ultra](configs/Flatbox-LED-Ultra/assets/flatbox-ultra-2.jpg)
