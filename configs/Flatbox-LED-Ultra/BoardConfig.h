@@ -92,29 +92,7 @@
 #define DEFAULT_LOCK_HOTKEYS false // or true
 #define DEFAULT_PS4CONTROLLER_TYPE PS4_CONTROLLER
 
-// This is the LEDs section.
-// The default `TURBO_LED_PIN` pin is set to `15` ( it is recommended to run through 3V3(OUT) with a resistor)
-// The Turbo LED will flash at a speed consistant with the set speed of the Turbo when a Turbo button is active.
-// It is recommended to disable the `TURBO_LED_PIN` by setting it to `-1` if you are sensitive of flashing lights.
-// The default `BOARD_LEDS_PIN` pin is set to `28`.
-// The board LED pin will allow you to connect addressible RGB LEDs on the Pico.
-// Addressible RGB LEDs should be connected to the `VBUS` pin (#40), an avalible ground pin and the defined `BOARD_LEDS_PIN`.
-// Special note - You should only ever use addressible RGB LEDs that are rated for 5v operation on the Pico.
-// The defualt `LED_BRIGHTNESS_MAXIMUM` value is `50`.
-// This will change how bright the LEDs are with `0` being off and `100` being full brightness.
-// The minimum `LED_BRIGHTNESS_MAXIMUM` value is `0`.
-// The maximum `LED_BRIGHTNESS_MAXIMUM` value is `100`.
-// The defualt `LED_BRIGHTNESS_STEPS` value is `5`.
-// This will change how many brightness steps there are when increasing or decreasing the brightness of the LEDs via the onboard shortcut.
-// It is recommend to keep this value at `5` or `10`.
-// The defualt `LED_FORMAT` is `LED_FORMAT_GRB`.
-// You can also choose the `LED_FORMAT` of `LED_FORMAT_RGB` if your addressible RGB LEDs are not working as intended.
-// The defualt `LEDS_PER_PIXEL` is set to `1`.
-// This will change how many addressible RGB LEDs there are per button.
-// The default LEDS_[BUTTON] is an order and has nothing to do with what GPIO pin something is connected to.
-// Unless you are planning on running custom animations I would recommmend you leave this as is.
 
-#define TURBO_LED_PIN -1
 #define BOARD_LEDS_PIN 15
 #define REVERSE_LED_PIN -1
 
@@ -142,37 +120,6 @@
 #define LEDS_BUTTON_A1   -1
 #define LEDS_BUTTON_A2   -1
 
-// This is the Player LED section.
-// In this section you can specify if Player LEDs will be active, and, if active, which pins will be used for them.
-// The defualt is `PLED_TYPE_NONE` which will turn the Player LEDs off.
-// The default pin for each Player LED is `-1` which disables it.
-// To enable a `PLED#_PIN`, replace the `-1` with the GPIO pin number that is desired.
-// There are three options for `PLED_TYPE` currently:
-// 1 - `PLED_TYPE_NONE` - This will disable the Player LEDs
-// 2 - `PLED_TYPE_PWM` - This will enable the Player LEDs ( it is recommended to run through 3V3(OUT) with a resistor)
-// 3 - `PLED_TYPE_RGB` - This will enable the Player LEDs as addressible RGB LEDs (please not that this has not been implemented yet)
-
-#define PLED_TYPE PLED_TYPE_NONE
-#define PLED1_PIN -1
-#define PLED2_PIN -1
-#define PLED3_PIN -1
-#define PLED4_PIN -1
-
-
-// This is the Analog section.
-// In this section you can specify if Analog is enabled, and, if endabled, which pins will be used for it.
-// The default for `ANALOG_ADC_VRX` and `ANALOG_ADC_VRY` is `-1` which disables them.
-// To enable a `ANALOG_ADC_VRX` and `ANALOG_ADC_VRY`, replace the `-1` with the GPIO pin numbers that are desired. 
-
-#define ANALOG_ADC_1_VRX -1
-#define ANALOG_ADC_1_VRY -1
-#define ANALOG_ADC_1_MODE DPAD_MODE_LEFT_ANALOG
-#define ANALOG_ADC_1_INVERT INVERT_NONE
-
-#define ANALOG_ADC_2_VRX -1
-#define ANALOG_ADC_2_VRY -1
-#define ANALOG_ADC_2_MODE DPAD_MODE_RIGHT_ANALOG
-#define ANALOG_ADC_2_INVERT INVERT_NONE
 
 
 // This is the I2C Display section (commonly known as the OLED display section).
@@ -204,7 +151,7 @@
 // Special note - All of the splash screen images can be changed via `include/bitmaps.h`
 
 #define SPLASH_MODE SPLASH_MODE_STATIC
-#define SPLASH_DURATION 7500 // Duration in milliseconds
+#define SPLASH_DURATION 3000 // Duration in milliseconds
 
 
 // The default `BUTTON_LAYOUT` is `BUTTON_LAYOUT_STICK` which will show an arcade stick on the left hand side of the display.
@@ -233,10 +180,6 @@
 #define BUTTON_LAYOUT BUTTON_LAYOUT_STICKLESS
 #define BUTTON_LAYOUT_RIGHT BUTTON_LAYOUT_STICKLESSB
 
-#define REVERSE_UP_DEFAULT 1
-#define REVERSE_DOWN_DEFAULT 1
-#define REVERSE_LEFT_DEFAULT 1
-#define REVERSE_RIGHT_DEFAULT 1
 
 // Board LED Add-on Setting
 // BOARD_LED_OFF  - Turns the on-board LED off
