@@ -34,7 +34,13 @@
 #define GPIO_PIN_01 GpioAction::BUTTON_PRESS_R3     // R3     | RS     | RS      | R3       | 12     | RS     |
 #define GPIO_PIN_04 GpioAction::BUTTON_PRESS_A1     // A1     | Guide  | Home    | PS       | 13     | ~      |
 #define GPIO_PIN_03 GpioAction::BUTTON_PRESS_A2     // A2     | ~      | Capture | ~        | 14     | ~      |
+#define GPIO_PIN_07 GpioAction::BUTTON_PRESS_FN     // Hotkey Function 
+#define GPIO_PIN_00 GpioAction::BUTTON_PRESS_TURBO
 
+#define GPIO_PIN_20 GpioAction::RESERVED  // FOR OLED I2C PIN
+#define GPIO_PIN_21 GpioAction::RESERVED  // FOR OLED I2C PIN
+#define GPIO_PIN_22 GpioAction::RESERVED  // FOR USB PASSTHROUGH
+#define GPIO_PIN_23 GpioAction::RESERVED  // FOR USB PASSTHROUGH
 
 // Keyboard Mapping Configuration
 //                                            // GP2040 | Xinput | Switch  | PS3/4/5  | Dinput | Arcade |
@@ -58,12 +64,7 @@
 #define KEY_BUTTON_A2   HID_KEY_F2            // A2     | ~      | Capture | ~        | 14     | ~      |
 #define KEY_BUTTON_FN   -1                    // Hotkey Function                                        |
 
-// This is Hotkey section
-#define PIN_BUTTON_FN        -1                      // Hotkey Function
-// This is Reverse mode section
-#define PIN_BUTTON_REVERSE   -1                   // UDLR Reverse
-// This is Turbo mode section 
-#define PIN_BUTTON_TURBO     -1                     // Turbo
+#define TURBO_ENABLED 1
 
 // This is D-PAD mode section 
 #define JSLIDER_ENABLED 1
@@ -86,24 +87,21 @@
 #define SLIDER_SOCD_SLOT_TWO  SOCD_MODE_SECOND_INPUT_PRIORITY
 #define SLIDER_SOCD_SLOT_DEFAULT SOCD_MODE_NEUTRAL 
 
-
-
 #define DEFAULT_FORCED_SETUP_MODE FORCED_SETUP_MODE_OFF // 	FORCED_SETUP_MODE_OFF, FORCED_SETUP_MODE_LOCK_MODE_SWITCH, FORCED_SETUP_MODE_LOCK_WEB_CONFIG, FORCED_SETUP_MODE_LOCK_BOTH
 #define DEFAULT_LOCK_HOTKEYS false // or true
 #define DEFAULT_PS4CONTROLLER_TYPE PS4_CONTROLLER
 
 
 #define BOARD_LEDS_PIN 15
-#define REVERSE_LED_PIN -1
 
 #define LED_BRIGHTNESS_MAXIMUM 150
 #define LED_BRIGHTNESS_STEPS 5
 #define LED_FORMAT LED_FORMAT_GRB
 #define LEDS_PER_PIXEL 1
 
-#define LEDS_DPAD_LEFT   1 // 11  
-#define LEDS_DPAD_DOWN   2//10
-#define LEDS_DPAD_RIGHT  3//9
+#define LEDS_DPAD_LEFT   1  
+#define LEDS_DPAD_DOWN   2
+#define LEDS_DPAD_RIGHT  3
 #define LEDS_DPAD_UP     12
 #define LEDS_BUTTON_B3   4
 #define LEDS_BUTTON_B4   5
@@ -179,32 +177,6 @@
 
 #define BUTTON_LAYOUT BUTTON_LAYOUT_STICKLESS
 #define BUTTON_LAYOUT_RIGHT BUTTON_LAYOUT_STICKLESSB
-
-
-// Board LED Add-on Setting
-// BOARD_LED_OFF  - Turns the on-board LED off
-// MODE_INDICATOR - On-board LED blinks on various frequencies depending
-//                  on the current mode (config, normal, or no USB data)
-// INPUT_TEST     - Blinks whenever any input is made
-
-#define BOARD_LED_TYPE ON_BOARD_LED_MODE_OFF
-
-// Dual Directional Add-on Options
-
-#define PIN_DUAL_DIRECTIONAL_UP -1
-#define PIN_DUAL_DIRECTIONAL_DOWN -1
-#define PIN_DUAL_DIRECTIONAL_LEFT -1
-#define PIN_DUAL_DIRECTIONAL_RIGHT -1
-#define DUAL_DIRECTIONAL_STICK_MODE DPAD_MODE_DIGITAL
-#define DUAL_DIRECTIONAL_COMBINE_MODE DUAL_COMBINE_MODE_MIXED
-
-// BOOTSEL Button Add-on setting
-#define BOOTSEL_BUTTON_MASK 0 // 0 means none, get other mask from GamepadState.h
-
-// Extra Button Add-on setting
-#define EXTRA_BUTTON_MASK 0 // 0 means none, get other mask from GamepadState.h
-                            // For directions, use GAMEPAD_MASK_DU, GAMEPAD_MASK_DD, GAMEPAD_MASK_DL and GAMEPAD_MASK_DR
-#define EXTRA_BUTTON_PIN -1
 
 
 // Button Lock Add-on setting
