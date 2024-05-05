@@ -126,8 +126,53 @@ void TurboInput::process()
     Gamepad * gamepad = Storage::getInstance().GetGamepad();
     const TurboOptions& options = Storage::getInstance().getAddonOptions().turboOptions;
     uint16_t buttonsPressed = gamepad->state.buttons & TURBO_BUTTON_MASK;
-    uint8_t dpadPressed = gamepad->state.dpad & GAMEPAD_MASK_DPAD;
+    
 
+    	uint32_t n_dpad = 0;
+
+	if(gamepad->getOptions().dpadMode == DpadMode::DPAD_MODE_LEFT_ANALOG)
+	{
+		if (gamepad->state.lx == GAMEPAD_JOYSTICK_MAX)
+		{
+			n_dpad |= GAMEPAD_MASK_RIGHT;
+		}
+		if (gamepad->state.lx == GAMEPAD_JOYSTICK_MIN)
+		{
+			n_dpad |= GAMEPAD_MASK_LEFT;
+		}
+		if (gamepad->state.ly == GAMEPAD_JOYSTICK_MIN)
+		{
+			n_dpad |= GAMEPAD_MASK_UP;
+		}
+		if (gamepad->state.ly == GAMEPAD_JOYSTICK_MAX)
+		{
+			n_dpad |= GAMEPAD_MASK_DOWN;
+		}
+	}
+	else if(gamepad->getOptions().dpadMode == DpadMode::DPAD_MODE_RIGHT_ANALOG)
+	{
+		if (gamepad->state.rx == GAMEPAD_JOYSTICK_MAX)
+		{
+			n_dpad |= GAMEPAD_MASK_RIGHT;
+		}
+		if (gamepad->state.ry == GAMEPAD_JOYSTICK_MIN)
+		{
+			n_dpad |= GAMEPAD_MASK_UP;
+		}
+		if (gamepad->state.rx == GAMEPAD_JOYSTICK_MIN)
+		{
+			n_dpad |= GAMEPAD_MASK_LEFT;
+		}
+		if (gamepad->state.ry == GAMEPAD_JOYSTICK_MAX)
+		{
+			n_dpad |= GAMEPAD_MASK_DOWN;
+		}	
+	}
+	else if(gamepad->getOptions().dpadMode == DpadMode::DPAD_MODE_DIGITAL)
+	{
+		n_dpad = gamepad->state.dpad ;
+	}
+uint8_t dpadPressed = n_dpad & GAMEPAD_MASK_DPAD;
     // Check for TURBO pin enabled
     if (gamepad->debouncedGpio & turboPinMask) {
         if (buttonsPressed && (lastPressed != buttonsPressed)) {

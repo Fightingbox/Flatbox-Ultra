@@ -12,7 +12,7 @@ using namespace std;
 #include "enums.pb.h"
 
 
-#define GAMEPAD_BUTTON_COUNT 14
+#define GAMEPAD_BUTTON_COUNT 15
 
 /*
 	Gamepad button mapping table:
@@ -56,7 +56,7 @@ using namespace std;
 #define GAMEPAD_MASK_R3    (1U << 11)
 #define GAMEPAD_MASK_A1    (1U << 12)
 #define GAMEPAD_MASK_A2    (1U << 13)
-
+#define GAMEPAD_MASK_M1    (1U << 14)
 // For detecting dpad as buttons
 
 #define GAMEPAD_MASK_DU    (1UL << 16)
@@ -110,6 +110,7 @@ const uint16_t buttonMasks[] =
 	GAMEPAD_MASK_R3,
 	GAMEPAD_MASK_A1,
 	GAMEPAD_MASK_A2,
+	GAMEPAD_MASK_M1,
 };
 
 struct GamepadState

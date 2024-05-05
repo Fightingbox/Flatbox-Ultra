@@ -150,6 +150,10 @@
 #define LEDS_BUTTON_A2  -1
 #endif
 
+#ifndef LEDS_BUTTON_M1
+#define LEDS_BUTTON_M1  -1
+#endif
+
 #ifndef LEDS_TURN_OFF_WHEN_SUSPENDED
 #define LEDS_TURN_OFF_WHEN_SUSPENDED 0
 #endif
@@ -198,6 +202,8 @@ private:
 	NeoPicoPlayerLEDs * neoPLEDs = nullptr;
 	AnimationStation as;
 	std::map<std::string, int> buttonPositions;
+		bool isFocusModeEnabled;
+	bool focusModePrevState;
 	bool turnOffWhenSuspended;
 };
 

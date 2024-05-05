@@ -367,8 +367,8 @@ bool ButtonLayoutScreen::pressedUp()
     switch (getGamepad()->getOptions().dpadMode)
     {
         case DPAD_MODE_DIGITAL:      return ((getGamepad()->state.dpad & GAMEPAD_MASK_DPAD) == GAMEPAD_MASK_UP);
-        case DPAD_MODE_LEFT_ANALOG:  return getGamepad()->state.ly == GAMEPAD_JOYSTICK_MIN;
-        case DPAD_MODE_RIGHT_ANALOG: return getGamepad()->state.ry == GAMEPAD_JOYSTICK_MIN;
+        case DPAD_MODE_LEFT_ANALOG:  return (getGamepad()->state.ly  == GAMEPAD_JOYSTICK_MIN);
+        case DPAD_MODE_RIGHT_ANALOG: return (getGamepad()->state.ry == GAMEPAD_JOYSTICK_MIN);
     }
 
     return false;

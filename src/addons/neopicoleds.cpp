@@ -34,7 +34,7 @@ const std::string BUTTON_LABEL_L3 = "L3";
 const std::string BUTTON_LABEL_R3 = "R3";
 const std::string BUTTON_LABEL_A1 = "A1";
 const std::string BUTTON_LABEL_A2 = "A2";
-
+const std::string BUTTON_LABEL_M1 = "M1";
 static std::vector<uint8_t> EMPTY_VECTOR;
 
 uint32_t rgbPLEDValues[4];
@@ -142,6 +142,8 @@ void NeoPicoLEDAddon::setup()
 	configureLEDs();
 
 	nextRunTime = make_timeout_time_ms(0); // Reset timeout
+	const FocusModeOptions& focusModeOptions = Storage::getInstance().getAddonOptions().focusModeOptions;
+		isFocusModeEnabled = focusModeOptions.enabled && isValidPin(focusModeOptions.pin);
 }
 
 void NeoPicoLEDAddon::process()
@@ -149,6 +151,8 @@ void NeoPicoLEDAddon::process()
 	const LEDOptions& ledOptions = Storage::getInstance().getLedOptions();
 	if (!isValidPin(ledOptions.dataPin) || !time_reached(this->nextRunTime))
 		return;
+
+
 
 	Gamepad * gamepad = Storage::getInstance().GetProcessedGamepad();
 	uint8_t * featureData = Storage::getInstance().GetFeatureData();
@@ -166,7 +170,61 @@ void NeoPicoLEDAddon::process()
 		as.HandleEvent(action);
 	}
 
-	uint32_t buttonState = gamepad->state.dpad << 16 | gamepad->state.buttons;
+	//uint32_t buttonState = gamepad->state.dpad << 16 | gamepad->state.buttons;
+	uint32_t n_dpad = 0;
+
+	if(gamepad->getOptions().dpadMode == DpadMode::DPAD_MODE_LEFT_ANALOG)
+	{
+		if (gamepad->state.lx == GAMEPAD_JOYSTICK_MAX)
+		{
+			n_dpad |= GAMEPAD_MASK_RIGHT;
+		}
+		if (gamepad->state.lx == GAMEPAD_JOYSTICK_MIN)
+		{
+			n_dpad |= GAMEPAD_MASK_LEFT;
+		}
+		if (gamepad->state.ly == GAMEPAD_JOYSTICK_MIN)
+		{
+			n_dpad |= GAMEPAD_MASK_UP;
+		}
+		if (gamepad->state.ly == GAMEPAD_JOYSTICK_MAX)
+		{
+			n_dpad |= GAMEPAD_MASK_DOWN;
+		}
+	}
+	else if(gamepad->getOptions().dpadMode == DpadMode::DPAD_MODE_RIGHT_ANALOG)
+	{
+		if (gamepad->state.rx == GAMEPAD_JOYSTICK_MAX)
+		{
+			n_dpad |= GAMEPAD_MASK_RIGHT;
+		}
+		if (gamepad->state.ry == GAMEPAD_JOYSTICK_MIN)
+		{
+			n_dpad |= GAMEPAD_MASK_UP;
+		}
+		if (gamepad->state.rx == GAMEPAD_JOYSTICK_MIN)
+		{
+			n_dpad |= GAMEPAD_MASK_LEFT;
+		}
+		if (gamepad->state.ry == GAMEPAD_JOYSTICK_MAX)
+		{
+			n_dpad |= GAMEPAD_MASK_DOWN;
+		}	
+	}
+	else if(gamepad->getOptions().dpadMode == DpadMode::DPAD_MODE_DIGITAL)
+	{
+		n_dpad = gamepad->state.dpad ;
+	}
+	
+	uint32_t buttonState = n_dpad << 16 | gamepad->state.buttons;
+	Mask_t values = Storage::getInstance().GetGamepad()->debouncedGpio;
+
+	if(values & (Storage::getInstance().GetGamepad()->mapButtonM1->pinMask))
+	{
+		buttonState |= Storage::getInstance().GetGamepad()->mapButtonM1->buttonMask;
+	}
+
+
 	vector<Pixel> pressed;
 	for (auto row : matrix.pixels)
 	{
@@ -176,6 +234,8 @@ void NeoPicoLEDAddon::process()
 				pressed.push_back(pixel);
 		}
 	}
+
+
 	if (pressed.size() > 0)
 		as.HandlePressed(pressed);
 	else
@@ -188,7 +248,16 @@ void NeoPicoLEDAddon::process()
 	} else {
 		as.SetBrightness(AnimationStation::GetBrightness());
 	}
+	FocusModeOptions * focusModeOptions = &Storage::getInstance().getAddonOptions().focusModeOptions;
+    if (isValidPin(focusModeOptions->pin))
+    {
+        if(!gpio_get(focusModeOptions->pin))
+        {
+            if (focusModeOptions->enabled && focusModeOptions->macroLockEnabled)
+            as.DimBrightnessTo0();
 
+        }
+    }
 	as.ApplyBrightness(frame);
 
 	// Apply the player LEDs to our first 4 leds if we're in NEOPIXEL mode
@@ -322,6 +391,7 @@ std::vector<std::vector<Pixel>> NeoPicoLEDAddon::generatedLEDStickless(vector<ve
 			PIXEL(BUTTON_LABEL_R3, GAMEPAD_MASK_R3),
 			PIXEL(BUTTON_LABEL_A1, GAMEPAD_MASK_A1),
 			PIXEL(BUTTON_LABEL_A2, GAMEPAD_MASK_A2),
+			PIXEL(BUTTON_LABEL_M1, GAMEPAD_MASK_M1),
 		},
 	};
 
@@ -511,6 +581,7 @@ uint8_t NeoPicoLEDAddon::setupButtonPositions()
 	buttonPositions.emplace(BUTTON_LABEL_R3, ledOptions.indexR3);
 	buttonPositions.emplace(BUTTON_LABEL_A1, ledOptions.indexA1);
 	buttonPositions.emplace(BUTTON_LABEL_A2, ledOptions.indexA2);
+	buttonPositions.emplace(BUTTON_LABEL_M1, ledOptions.indexM1);
 	uint8_t buttonCount = 0;
 	for (auto const& buttonPosition : buttonPositions)
 	{

@@ -70,6 +70,8 @@ void GPButton::draw() {
             mapMask = getGamepad()->mapButtonA1;
         } else if ((this->_inputMask & GAMEPAD_MASK_A2) == GAMEPAD_MASK_A2) {
             mapMask = getGamepad()->mapButtonA2;
+        }else if ((this->_inputMask & GAMEPAD_MASK_M1) == GAMEPAD_MASK_M1) {
+            mapMask = getGamepad()->mapButtonM1;
         }
     } else if (_inputType == GP_ELEMENT_DIR_BUTTON) {
         // direction button mask
@@ -106,8 +108,8 @@ void GPButton::draw() {
         }
     }
 
-    state = (buttonState ? pinState : 0);
-
+    //state = (buttonState ? pinState : 0);
+    state = pinState;
     // base
     if (this->_shape == GP_SHAPE_ELLIPSE) {
         uint16_t scaledSize = (uint16_t)((double)this->_sizeX * scaleX);

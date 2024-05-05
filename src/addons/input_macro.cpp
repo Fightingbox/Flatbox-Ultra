@@ -85,10 +85,18 @@ void InputMacro::reset() {
     }
 }
 
+void InputMacro::restart(Macro& macro) {
+    macroStartTime = currentMicros;
+    macroInputPosition = 0;
+    MacroInput& newMacroInput = macro.macroInputs[macroInputPosition];
+    uint32_t newMacroInputDuration = newMacroInput.duration + newMacroInput.waitDuration;
+    macroInputHoldTime = newMacroInputDuration <= 0 ? INPUT_HOLD_US : newMacroInputDuration;
+}
+
 void InputMacro::checkMacroPress() {
     Gamepad * gamepad = Storage::getInstance().GetGamepad();
-    Mask_t allPins = gamepad->debouncedGpio;
-
+    //Mask_t allPins = gamepad->debouncedGpio;
+    uint32_t allPins = ~gpio_get_all();
     // Go through our macro list
     pressedMacro = -1;
     for(int i = 0; i < MAX_MACRO_LIMIT; i++) {
@@ -171,7 +179,7 @@ void InputMacro::runCurrentMacro() {
 
     MacroInput& macroInput = macro.macroInputs[macroInputPosition];
     Gamepad * gamepad = Storage::getInstance().GetGamepad();
-    uint64_t currentMicros = getMicro();
+    currentMicros = getMicro();
 
     if (!macro.interruptible && macro.exclusive) {
         // Prevent any other inputs from modifying our input (Exclusive)
@@ -188,6 +196,24 @@ void InputMacro::runCurrentMacro() {
             // Macro is interruptible and a user pressed something
             reset();
             return;
+        }
+    }
+
+    // Have we elapsed the input hold time?
+    if ((currentMicros - macroStartTime) >= macroInputHoldTime) {
+        macroStartTime = currentMicros;
+        macroInputPosition++;
+        
+        if (macroInputPosition >= (macro.macroInputs_count)) {
+            if ( macro.macroType == ON_PRESS ) {
+                reset(); // On press = no more macro
+            } else {
+                restart(macro); // On Hold-Repeat or On Toggle = start macro again
+            }
+        } else {
+            MacroInput& newMacroInput = macro.macroInputs[macroInputPosition];
+            uint32_t newMacroInputDuration = newMacroInput.duration + newMacroInput.waitDuration;
+            macroInputHoldTime = newMacroInputDuration <= 0 ? INPUT_HOLD_US : newMacroInputDuration;
         }
     }
 
@@ -213,38 +239,22 @@ void InputMacro::runCurrentMacro() {
             gpio_put(BOARD_LED_PIN, (gamepad->state.dpad || gamepad->state.buttons) ? 1 : 0);
         }
     }
-
-    // Have we elapsed the input hold time?
-    if ((currentMicros - macroStartTime) >= macroInputHoldTime) {
-        macroStartTime = currentMicros;
-        macroInputPosition++;
-        if (macroInputPosition >= (macro.macroInputs_count)) {
-            if ( macro.macroType == ON_PRESS ) {
-                reset(); // On press = no more macro
-            } else {
-                if ( macro.macroType == ON_HOLD_REPEAT) {
-                    reset(); // On repeat, reset but keep the button held
-                } else {
-                    macroInputPosition = 0; // On Hold-Repeat or On Toggle = start macro again
-                    MacroInput& newMacroInput = macro.macroInputs[macroInputPosition];
-                    uint32_t newMacroInputDuration = newMacroInput.duration + newMacroInput.waitDuration;
-                    macroInputHoldTime = newMacroInputDuration <= 0 ? INPUT_HOLD_US : newMacroInputDuration;
-                }
-            }
-        } else {
-            MacroInput& newMacroInput = macro.macroInputs[macroInputPosition];
-            uint32_t newMacroInputDuration = newMacroInput.duration + newMacroInput.waitDuration;
-            macroInputHoldTime = newMacroInputDuration <= 0 ? INPUT_HOLD_US : newMacroInputDuration;
-        }
-    }
 }
 
 void InputMacro::preprocess()
 {
     FocusModeOptions * focusModeOptions = &Storage::getInstance().getAddonOptions().focusModeOptions;
-    if (focusModeOptions->enabled && focusModeOptions->macroLockEnabled)
-        return;
+    if (isValidPin(focusModeOptions->pin))
+    {
+        if(!gpio_get(focusModeOptions->pin))
+        {
+            if (focusModeOptions->enabled && focusModeOptions->macroLockEnabled)
+            return;
 
+        }
+    }
+    
+   
     checkMacroPress();
     checkMacroAction();
     runCurrentMacro();
