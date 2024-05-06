@@ -9,7 +9,7 @@
 #include "enums.pb.h"
 #include "class/hid/hid.h"
 
-#define BOARD_CONFIG_LABEL "Flatbox Ultra"
+#define BOARD_CONFIG_LABEL "Flatbox LED Pro"
 
 // Main pin mapping Configuration
 
@@ -32,7 +32,6 @@
 #define GPIO_PIN_01 GpioAction::BUTTON_PRESS_R3     // R3     | RS     | RS      | R3       | 12     | RS     |
 #define GPIO_PIN_04 GpioAction::BUTTON_PRESS_A1     // A1     | Guide  | Home    | PS       | 13     | ~      |
 #define GPIO_PIN_03 GpioAction::BUTTON_PRESS_A2     // A2     | ~      | Capture | ~        | 14     | ~      |
-#define GPIO_PIN_07 GpioAction::BUTTON_PRESS_FN 
 
 // Keyboard Mapping Configuration
 //                                            // GP2040 | Xinput | Switch  | PS3/4/5  | Dinput | Arcade |
@@ -91,27 +90,27 @@
 #define I2C0_PIN_SDA 20
 #define I2C0_PIN_SCL 21
 
-#define BUTTON_LAYOUT BUTTON_LAYOUT_STICKLESS_14
-#define BUTTON_LAYOUT_RIGHT BUTTON_LAYOUT_STICKLESS_14B
+#define BUTTON_LAYOUT BUTTON_LAYOUT_STICKLESS
+#define BUTTON_LAYOUT_RIGHT BUTTON_LAYOUT_STICKLESSB
 #define SPLASH_MODE SPLASH_MODE_STATIC
 #define SPLASH_DURATION 2500
 
 #define LEDS_DPAD_LEFT   1 
 #define LEDS_DPAD_DOWN   2
 #define LEDS_DPAD_RIGHT  3
-#define LEDS_DPAD_UP     13
+#define LEDS_DPAD_UP     0
 #define LEDS_BUTTON_B3   4
 #define LEDS_BUTTON_B4   5
 #define LEDS_BUTTON_R1   6
 #define LEDS_BUTTON_L1   7
-#define LEDS_BUTTON_B1   11
-#define LEDS_BUTTON_B2   10
-#define LEDS_BUTTON_R2   9
-#define LEDS_BUTTON_L2   8
+#define LEDS_BUTTON_B1   8
+#define LEDS_BUTTON_B2   9
+#define LEDS_BUTTON_R2   10
+#define LEDS_BUTTON_L2   11
 #define LEDS_BUTTON_S1   -1
 #define LEDS_BUTTON_S2   -1
-#define LEDS_BUTTON_L3   0
-#define LEDS_BUTTON_R3   12
+#define LEDS_BUTTON_L3   -1
+#define LEDS_BUTTON_R3   -1
 #define LEDS_BUTTON_A1   -1
 #define LEDS_BUTTON_A2   -1
 
